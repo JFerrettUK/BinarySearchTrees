@@ -3,41 +3,21 @@ class Tree {
         this.root = "test"
         this.size = 0;
     }
+}
 
-    buildTree = function(array, node) {
-        if (array.length == 0) {
-            return 
-        }
-        
-        function findMid(enterArray) {
-            let end = (enterArray.length - 1) 
-            let mid = (0 + end) / 2
-            return mid
-        }
-       
-        let mid = Math.floor(findMid(array))
-        node = new TreeNode(array[mid])
-
-        let leftArray = array.slice(0, mid);
-        let rightArray = array.slice(mid + 1, array.length);
-    
-    
-        if (leftArray) {
-            let leftMid = Math.floor(findMid(leftArray))
-            node.left = new TreeNode(leftArray[leftMid])
-        }
-        
-        if (rightArray) {
-            let rightMid = Math.floor(findMid(rightArray))
-            node.right = new TreeNode(rightArray[rightMid])
-        }
-        console.log(node)
-
-        this.size++
-        this.root = "test2"
-
-        return this.buildTree(leftArray, node.left), this.buildTree(rightArray, node.right)
+function buildTree (array, start = 0, end = array.length - 1) {
+    if (start > end) {
+        return null
     }
+
+    let mid = Math.floor((start + end) / 2);
+
+
+    let root = new TreeNode(array[mid]);
+    root.left = buildTree(array, start, mid-1);
+    root.right = buildTree(array, mid+1, end);
+
+    return root;
 }
 
 class TreeNode {
@@ -48,8 +28,7 @@ class TreeNode {
     }
 }
 
-let testRoot = "I'm global"
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+let array = [1, 2, 3, 4, 5, 6, 7]
 let testTree = new Tree
-testTree.buildTree(array)
-console.log(testRoot)
+testTree.root = buildTree(array, 0, array.length - 1)
+console.log(testTree)
