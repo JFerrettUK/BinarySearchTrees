@@ -41,16 +41,78 @@ class Tree {
     }
 
     recursionDelete = function(root, remove) {
+        console.log(root.data + " reached | " + i++ + " delete ran!" + " | remove: " + remove + " " )
+
+        //If no root matches value, return
         if (root == null) {
             return root
         }
 
-        if (root > remove) {
-            this.recursionDelete(root.left)
-
+        if (remove < root.data) {
+            console.log("Traveled left")
+            root.left = this.recursionDelete(root.left, remove);
         }
-        return root
+        
+        else if (remove > root.data) {
+            console.log("Traveled right")
+            root.right = this.recursionDelete(root.right, remove);
+        }
 
+        else {
+            if (root.left == null) {
+                return root.right
+            }
+
+            else if (root.right == null) {
+                return root.left
+            }
+        }
+        
+        return root
+    }
+
+    v2recursionDelete = function(root, data)
+    {
+        if (root == null) {
+            return root;
+        }
+    
+        if (data < root.data)  {
+            root.left = this.v2recursionDelete(root.left, data);
+        } 
+        
+        else if (data > root.data) {
+            root.right = this.v2recursionDelete(root.right, data);
+        }
+
+        else {
+
+            // node with only one child or no child
+            if (root.left == null) {
+                return root.right;
+            } 
+            
+            else if (root.right == null) {
+                return root.left;
+            }
+
+            // node with two children: Get the inorder
+            // successor (smallest in the right subtree)
+            root.data = this.minValue(root.right);
+            root.right = this.v2recursionDelete(root.right, root.data);
+        }
+      
+        return root;
+    }
+
+    minValue = function (root) {
+        let minv = root.data;
+            while (root.left != null) {
+                minv = root.left.data;
+                root = root.left;
+            }
+
+            return minv;
     }
 }
 
@@ -62,6 +124,7 @@ class TreeNode {
     }
 }
 
+let i = 0
 let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let testTree = new Tree;
 testTree.root = testTree.buildTree(array, 0, array.length - 1);
@@ -79,6 +142,6 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
-testTree.insert(10);
-testTree.delete(10);
+prettyPrint(testTree.root);
+testTree.delete(4);
 prettyPrint(testTree.root);
