@@ -13,7 +13,7 @@ class Tree {
         let root = new TreeNode(array[mid]);
         root.left = this.buildTree(array, start, mid-1);
         root.right = this.buildTree(array, mid+1, end);
-        testTree.size++
+        testTree.size++;
     
         return root;
     }
@@ -28,103 +28,68 @@ class Tree {
             return root;
         } 
         
-        if (insert < root.data) {
-            root.left = this.recursionInsert(root.left, insert)
-        } else if (insert > root.data) {
-            root.right = this.recursionInsert(root.right, insert)
+        if (insert < root.key) {
+            root.left = this.recursionInsert(root.left, insert);
+        } else if (insert > root.key) {
+            root.right = this.recursionInsert(root.right, insert);
         }
-        return root
+        return root;
     }
 
     delete = function(remove) {
-        this.root = this.recursionDelete(this.root, remove);
+        this.root = this.deleteNode(this.root, remove);
     }
 
-    recursionDelete = function(root, remove) {
-        console.log(root.data + " reached | " + i++ + " delete ran!" + " | remove: " + remove + " " )
-
+    deleteNode = function(root, remove) {
         //If no root matches value, return
         if (root == null) {
             return root
         }
 
-        if (remove < root.data) {
-            console.log("Traveled left")
-            root.left = this.recursionDelete(root.left, remove);
-        }
-        
-        else if (remove > root.data) {
-            console.log("Traveled right")
-            root.right = this.recursionDelete(root.right, remove);
-        }
-
-        else {
+        if (remove < root.key) {
+            root.left = this.deleteNode(root.left, remove);
+        } else if (remove > root.key) {
+            root.right = this.deleteNode(root.right, remove);
+        } else {
             if (root.left == null) {
                 return root.right
             }
-
             else if (root.right == null) {
                 return root.left
-            }
+            } 
+
+            root.key = this.minValue(root.right);
+            console.log(root.key + " is the minimum value")
+            root.right = this.deleteNode(root.right, root.key)
+            
         }
-        
+
         return root
     }
 
-    v2recursionDelete = function(root, data)
-    {
-        if (root == null) {
-            return root;
-        }
-    
-        if (data < root.data)  {
-            root.left = this.v2recursionDelete(root.left, data);
-        } 
-        
-        else if (data > root.data) {
-            root.right = this.v2recursionDelete(root.right, data);
-        }
-
-        else {
-
-            // node with only one child or no child
-            if (root.left == null) {
-                return root.right;
-            } 
-            
-            else if (root.right == null) {
-                return root.left;
-            }
-
-            // node with two children: Get the inorder
-            // successor (smallest in the right subtree)
-            root.data = this.minValue(root.right);
-            root.right = this.v2recursionDelete(root.right, root.data);
-        }
-      
-        return root;
-    }
-
     minValue = function (root) {
-        let minv = root.data;
-            while (root.left != null) {
-                minv = root.left.data;
-                root = root.left;
-            }
-
-            return minv;
+        let minv = root.key;
+        while (root.left != null) {
+            console.log(minv + " is minv while root.left != null")
+            minv = root.left.key;
+            console.log(minv + " is minv of the next left key")
+            root = root.left;
+            console.log(root + " is the root")
+        }
+        return minv;
     }
+
 }
 
+
 class TreeNode {
-    constructor(data) {
-        this.data = data;
+    constructor(key) {
+        this.key = key;
         this.left = null;
         this.right = null;
     }
 }
 
-let i = 0
 let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 let testTree = new Tree;
 testTree.root = testTree.buildTree(array, 0, array.length - 1);
@@ -136,12 +101,13 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     if (node.right !== null) {
       prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
     }
-    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.key}`);
     if (node.left !== null) {
       prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
     }
 }
 
 prettyPrint(testTree.root);
-testTree.delete(4);
+testTree.delete(5);
+
 prettyPrint(testTree.root);
