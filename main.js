@@ -59,7 +59,6 @@ class Tree {
             } 
 
             root.key = this.minValue(root.right);
-            console.log(root.key + " is the minimum value")
             root.right = this.deleteNode(root.right, root.key)
             
         }
@@ -70,15 +69,36 @@ class Tree {
     minValue = function (root) {
         let minv = root.key;
         while (root.left != null) {
-            console.log(minv + " is minv while root.left != null")
             minv = root.left.key;
-            console.log(minv + " is minv of the next left key")
             root = root.left;
-            console.log(root + " is the root")
         }
         return minv;
     }
 
+    // Write a find function which accepts a value and returns the node with the given value.
+    find = function(findValue) {
+        let findRoot = testTree.findNode(this.root, findValue);
+        return findRoot
+    }
+
+    findNode = function(root, findValue) {
+        console.log(root.key + " > " + findValue)
+        if (root.key == findValue) {
+            console.log("found value")
+            return root
+        }
+        
+        if (root == null) {
+            return root
+        }
+        
+        if (findValue < root.key) {
+            root.left = this.findNode(root.left, findValue);
+        } else if (findValue > root.key) {
+            root.right = this.findNode(root.right, findValue);
+        }
+        return root;
+    }
 }
 
 
@@ -108,6 +128,5 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
-testTree.delete(5);
-
+console.log(testTree.find(7))
 prettyPrint(testTree.root);
