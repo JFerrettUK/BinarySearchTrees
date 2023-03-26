@@ -76,28 +76,21 @@ class Tree {
     }
 
     // Write a find function which accepts a value and returns the node with the given value.
-    find = function(findValue) {
-        let findRoot = testTree.findNode(this.root, findValue);
-        return findRoot
-    }
-
-    findNode = function(root, findValue) {
-        console.log(root.key + " > " + findValue)
-        if (root.key == findValue) {
-            console.log("found value")
-            return root
+    find = function(value) {
+        if(!value || !this.root) {
+            return undefined
         }
-        
-        if (root == null) {
-            return root
+        let current = this.root;
+        let found = false;
+        while (!found && current) {
+            if (value == current.key) found = current
+            if (value < current.key) {
+                current = current.left;
+            } else if (value > current.key) {
+                current = current.right;
+            }
         }
-        
-        if (findValue < root.key) {
-            root.left = this.findNode(root.left, findValue);
-        } else if (findValue > root.key) {
-            root.right = this.findNode(root.right, findValue);
-        }
-        return root;
+        return found
     }
 }
 
@@ -128,5 +121,5 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
-console.log(testTree.find(7))
+console.log(testTree.find(8))
 prettyPrint(testTree.root);
