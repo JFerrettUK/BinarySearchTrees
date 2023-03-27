@@ -80,10 +80,14 @@ class Tree {
         if(!findValue || !this.root) {
             return null
         }
+        
         let root = this.root;
         let found = false;
         while (!found && root) {
-            if (findValue == root.key) found = root
+            if (findValue == root.key) {
+                found = root
+            }
+
             if (findValue < root.key) {
                 root = root.left;
             } else if (findValue > root.key) {
@@ -93,8 +97,38 @@ class Tree {
         if (found !== false) return found;
         if (found == false) return "Value not found";
     }
-}
 
+    //Accepts another functions as a parameter
+    //Traverses the tree in breadth-first level order (clarify)
+    //Provides each node as the argument to the provided function
+    //This function can be implemented using either iteration or recursion
+    //The method should return an array of values if no function is given
+    //Top: You will want to use an array acting as a queue, to keep track of all the child nodes
+    //and to add new ones to the list
+    levelOrder = function(funct) {
+        let queue = [];
+        let root = this.root;
+
+        function exploreNodes(root) {
+            queue.push(root.key);
+            console.log(queue)
+
+
+            while (queue.length !== 0) {
+                let current = root
+                console.log(current);
+                if (current.left !== null) {queue.push(current.left.key);}
+                if (current.right !== null) {queue.push(current.right.key);}
+                queue.pop()
+                console.log(queue)
+            }
+        }
+
+        exploreNodes(root);
+
+        return queue
+    }
+}
 
 class TreeNode {
     constructor(key) {
@@ -122,5 +156,4 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
-console.log(testTree.find(7))
-prettyPrint(testTree.root);
+console.log(testTree.levelOrder())
