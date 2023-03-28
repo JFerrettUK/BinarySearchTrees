@@ -105,28 +105,37 @@ class Tree {
     //The method should return an array of values if no function is given
     //Top: You will want to use an array acting as a queue, to keep track of all the child nodes
     //and to add new ones to the list
-    levelOrder = function(funct) {
-        let queue = [];
+    exploreNodes = function() {
         let root = this.root;
 
-        function exploreNodes(root) {
-            queue.push(root.key);
-            console.log(queue)
+        if (!root) return
 
+        let result = []
+        let queue = [root];
 
-            while (queue.length !== 0) {
-                let current = root
-                console.log(current);
-                if (current.left !== null) {queue.push(current.left.key);}
-                if (current.right !== null) {queue.push(current.right.key);}
-                queue.pop()
-                console.log(queue)
+        while (queue.length !== 0) {
+            console.log(queue[0])
+            console.log("is queue")
+            let subarr = []
+            let n = queue.length
+            for (let i = 0; i < n; i++) {
+                let node = queue.pop()
+                subarr.push(node.key)
+                if (node.left) queue.unshift(node.left) 
+                if (node.right) queue.unshift(node.right)                    
             }
+            result.push(subarr)
+            console.log(result)
+            console.log("is result")
+
         }
+        console.log(result)
+        return result        
+    }
 
-        exploreNodes(root);
-
-        return queue
+    levelOrder = function(funct) {
+        console.log(this.exploreNodes());
+        // funct(valueFunc)
     }
 }
 
