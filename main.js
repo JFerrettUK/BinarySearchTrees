@@ -111,11 +111,10 @@ class Tree {
         if (!root) return
 
         let result = []
+        
         let queue = [root];
 
         while (queue.length !== 0) {
-            console.log(queue[0])
-            console.log("is queue")
             let subarr = []
             let n = queue.length
             for (let i = 0; i < n; i++) {
@@ -125,17 +124,21 @@ class Tree {
                 if (node.right) queue.unshift(node.right)                    
             }
             result.push(subarr)
-            console.log(result)
-            console.log("is result")
-
         }
-        console.log(result)
-        return result        
+
+        let newResult = []
+
+        for (let index = 0; index <= result.length; index++) {
+            newResult = newResult.concat(result[index]);
+        }
+
+        newResult.pop()
+        return newResult        
     }
 
     levelOrder = function(funct) {
-        console.log(this.exploreNodes());
-        // funct(valueFunc)
+        let valueFunc = this.exploreNodes();
+        funct(valueFunc)
     }
 }
 
@@ -165,4 +168,9 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
-console.log(testTree.levelOrder())
+
+function test(i) {
+    console.log(i + " is array")
+}
+
+console.log(testTree.levelOrder(test))
