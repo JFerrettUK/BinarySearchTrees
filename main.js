@@ -98,13 +98,7 @@ class Tree {
         if (found == false) return "Value not found";
     }
 
-    //Accepts another functions as a parameter
-    //Traverses the tree in breadth-first level order (clarify)
-    //Provides each node as the argument to the provided function
-    //This function can be implemented using either iteration or recursion
-    //The method should return an array of values if no function is given
-    //Top: You will want to use an array acting as a queue, to keep track of all the child nodes
-    //and to add new ones to the list
+    //breadth-first
     exploreNodes = function() {
         let root = this.root;
 
@@ -120,8 +114,13 @@ class Tree {
             for (let i = 0; i < n; i++) {
                 let node = queue.pop()
                 subarr.push(node.key)
-                if (node.left) queue.unshift(node.left) 
-                if (node.right) queue.unshift(node.right)                    
+                
+                if (node.left) {
+                    queue.unshift(node.left) 
+                }
+                if (node.right) {
+                    queue.unshift(node.right)     
+                }               
             }
             result.push(subarr)
         }
@@ -140,6 +139,39 @@ class Tree {
         let valueFunc = this.exploreNodes();
         funct(valueFunc)
     }
+
+    //depth-first
+
+    //preorder: Root / Left / Right
+        //visit root
+        //visit left subtree
+        //visit right subtree
+    
+    preorder(func) {
+        let preorderVal = this.preorderRecur(this.root);
+        console.log(preorderVal)
+        func(preorderVal)
+    }
+
+    preorderRecur(root, arr = []) {
+        if(!root) {
+            return null
+        }
+
+        arr.push(root.key);
+
+        if (root.left) {
+            this.preorderRecur(root.left, arr);
+        }
+        if (root.right) {
+            this.preorderRecur(root.right, arr);
+        }    
+
+        return arr;
+    }
+
+    //inorder: Left / Root / Right
+    //postorder: Left / Right / Root
 }
 
 class TreeNode {
@@ -150,7 +182,7 @@ class TreeNode {
     }
 }
 
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 let testTree = new Tree;
 testTree.root = testTree.buildTree(array, 0, array.length - 1);
 
@@ -168,9 +200,5 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
+console.log(testTree.preorder());
 
-function test(i) {
-    console.log(i + " is array")
-}
-
-console.log(testTree.levelOrder(test))
