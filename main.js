@@ -1,7 +1,6 @@
 class Tree {
     constructor() {
         this.root = null
-        this.size = 0;
     }
     
     buildTree  = function(array, start = 0, end = array.length - 1) {
@@ -13,7 +12,6 @@ class Tree {
         let root = new TreeNode(array[mid]);
         root.left = this.buildTree(array, start, mid-1);
         root.right = this.buildTree(array, mid+1, end);
-        testTree.size++;
     
         return root;
     }
@@ -60,7 +58,6 @@ class Tree {
 
             root.key = this.minValue(root.right);
             root.right = this.deleteNode(root.right, root.key)
-            
         }
 
         return root
@@ -75,7 +72,6 @@ class Tree {
         return minv;
     }
 
-    // Write a find function which accepts a value and returns the node with the given value.
     find = function(findValue) {
         if(!findValue || !this.root) {
             return null
@@ -98,7 +94,6 @@ class Tree {
         if (found == false) return "Value not found";
     }
 
-    //breadth-first
     exploreNodes = function() {
         let root = this.root;
 
@@ -140,20 +135,12 @@ class Tree {
         funct(valueFunc)
     }
 
-    //depth-first
-
-    //preorder: Root / Left / Right
-        //visit root
-        //visit left subtree
-        //visit right subtree
-    
     preorder(func) {
         let preorderVal = this.preorderRecur(this.root);
-        console.log(preorderVal)
         func(preorderVal)
     }
 
-    preorderRecur(root, arr = []) {
+    preorderRecur = function(root, arr = []) {
         if(!root) {
             return null
         }
@@ -170,8 +157,85 @@ class Tree {
         return arr;
     }
 
-    //inorder: Left / Root / Right
-    //postorder: Left / Right / Root
+    inorder = function(func) {
+        let preorderVal = this.inorderRecur(this.root);
+        func(preorderVal)
+    }
+
+    inorderRecur = function(root, arr = []) {
+        if(!root) {
+            return null
+        }
+
+        if (root.left) {
+            this.inorderRecur(root.left, arr);
+        }
+
+        arr.push(root.key);
+
+        if (root.right) {
+            this.inorderRecur(root.right, arr);
+        }    
+
+        return arr;
+    }
+
+    postorder = function(func) {
+        let preorderVal = this.postorderRecur(this.root);
+        func(preorderVal)
+    }
+
+    postorderRecur = function(root, arr = []) {
+        if(!root) {
+            return null
+        }
+
+        if (root.left) {
+            this.postorderRecur(root.left, arr);
+        }
+
+        if (root.right) {
+            this.postorderRecur(root.right, arr);
+        }    
+
+        arr.push(root.key);
+
+        return arr;
+    }
+    
+    height = function(root) {
+        if (root == null) {
+            return 0
+        }
+        let leftTreeHeight = this.height(root.left)
+        let rightTreeHeight = this.height(root.right)
+        return Math.max(leftTreeHeight, rightTreeHeight) + 1
+    }
+
+    nodeHeight = function(findValue) {
+        let foundValue = this.find(findValue)
+        return this.height(foundValue)
+    }
+
+    depth = function(findValue) {
+        let foundValue = this.find(findValue)
+        let valueHeight =  this.height(foundValue)
+        //valueHeight is how many nodes the target is from the leaf
+        //find the number of branches and delete this number +1
+                
+        let rootHeight = 0
+
+        function findHeight(n, arr) {
+            if(i == -1) {
+                return
+            }
+            height++
+            findHeight(arr[i], arr, height)
+            return height
+        }
+
+        this.root
+    }
 }
 
 class TreeNode {
@@ -200,5 +264,4 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 }
 
 prettyPrint(testTree.root);
-console.log(testTree.preorder());
-
+console.log(testTree.depth(6))
