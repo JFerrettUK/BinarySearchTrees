@@ -16,6 +16,19 @@ class Tree {
         return root;
     }
 
+    buildUnbalancedTree  = function(array) {
+        if (array.length == 0) {
+            return null;
+        }
+
+        let root = new TreeNode(array[0]);
+        array.shift()
+        root.left = this.buildUnbalancedTree(array);
+        root.right = this.buildUnbalancedTree(array);
+    
+        return root;
+    }
+
     insert = function(insert) {
         this.root = this.recursionInsert(this.root, insert);
     }
@@ -132,7 +145,7 @@ class Tree {
 
     levelOrder = function(funct) {
         let valueFunc = this.exploreNodes();
-        funct(valueFunc)
+        return(valueFunc)
     }
 
     preorder(func) {
@@ -207,9 +220,7 @@ class Tree {
         if (root == null) {
             return 0
         }
-        let leftTreeHeight = this.height(root.left)
-        let rightTreeHeight = this.height(root.right)
-        return Math.max(leftTreeHeight, rightTreeHeight) + 1
+        return Math.max(this.height(root.left), this.height(root.right)) + 1
     }
 
     nodeHeight = function(findValue) {
@@ -220,21 +231,45 @@ class Tree {
     depth = function(findValue) {
         let foundValue = this.find(findValue)
         let valueHeight =  this.height(foundValue)
-        //valueHeight is how many nodes the target is from the leaf
-        //find the number of branches and delete this number +1
-                
-        let rootHeight = 0
+        let rootHeight = (testTree.nodeHeight(testTree.root.key))
+        return rootHeight - valueHeight
+    }
 
-        function findHeight(n, arr) {
-            if(i == -1) {
-                return
-            }
-            height++
-            findHeight(arr[i], arr, height)
-            return height
+    isBalanced = function(root) {
+        if(root == null) {
+            return true
         }
 
-        this.root
+        let leftHeight = this.height(root.left)
+        let rightHeight = this.height(root.right)
+        console.log(rightHeight + " - " + leftHeight + " is " + (rightHeight - leftHeight))
+
+        if (Math.abs(leftHeight - rightHeight) <= 1 
+        && this.isBalanced(root.left)== true 
+        && this.isBalanced(root.right) == true) {
+            return true
+        }
+         
+        return false
+    }
+
+    checkBalance = function() {
+        let thisTree = this.root
+        return this.isBalanced(thisTree);
+    }
+
+    rebalance = function() {
+        //rebalance an unbalanced tree
+
+        //find the unbalanced tree and save it as a value
+        let thisTree = this.root
+
+        //make an array from the unbalanced tree
+        let treeArray = this.preorderRecur(thisTree)
+        console.log(treeArray)
+        
+        //take the array and rebalance it using the buildTree function
+        this.root = this.buildTree(treeArray)
     }
 }
 
@@ -245,10 +280,6 @@ class TreeNode {
         this.right = null;
     }
 }
-
-let array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-let testTree = new Tree;
-testTree.root = testTree.buildTree(array, 0, array.length - 1);
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
     if (node === null) {
@@ -263,5 +294,27 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
 }
 
-prettyPrint(testTree.root);
-console.log(testTree.depth(6))
+function driverScript() {
+    // Create a binary search tree from an array of random numbers. 
+    let randomNoArr = [3, 54, 21, 787, 25, 76, 83, 43, 12, 938]
+    console.log(randomNoArr.sort((a,b) => a-b));
+    let driverTree = new Tree;
+    driverTree.root = driverTree.buildTree(randomNoArr);
+    prettyPrint(driverTree.root);
+
+    // Confirm that the tree is balanced by calling isBalanced
+    console.log(driverTree.isBalanced())
+    // Print out all elements in level, pre, post, and in order
+    console.log(driverTree.levelOrder())
+    console.log(driverTree.preorderRecur(driverTree.root))
+    console.log(driverTree.postorderRecur(driverTree.root))
+    console.log(driverTree.inorderRecur(driverTree.root))
+
+    // Unbalance the tree by adding several numbers > 100
+    // Confirm that the tree is unbalanced by calling isBalanced
+    // Balance the tree by calling rebalance
+    // Confirm that the tree is balanced by calling isBalanced
+    // Print out all elements in level, pre, post, and in order
+} 
+
+driverScript()
