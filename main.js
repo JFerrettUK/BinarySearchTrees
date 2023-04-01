@@ -143,7 +143,7 @@ class Tree {
         return newResult        
     }
 
-    levelOrder = function(funct) {
+    levelOrder = function() {
         let valueFunc = this.exploreNodes();
         return(valueFunc)
     }
@@ -231,7 +231,7 @@ class Tree {
     depth = function(findValue) {
         let foundValue = this.find(findValue)
         let valueHeight =  this.height(foundValue)
-        let rootHeight = (testTree.nodeHeight(testTree.root.key))
+        let rootHeight = (this.nodeHeight(this.root.key))
         return rootHeight - valueHeight
     }
 
@@ -242,7 +242,6 @@ class Tree {
 
         let leftHeight = this.height(root.left)
         let rightHeight = this.height(root.right)
-        console.log(rightHeight + " - " + leftHeight + " is " + (rightHeight - leftHeight))
 
         if (Math.abs(leftHeight - rightHeight) <= 1 
         && this.isBalanced(root.left)== true 
@@ -266,7 +265,6 @@ class Tree {
 
         //make an array from the unbalanced tree
         let treeArray = this.preorderRecur(thisTree)
-        console.log(treeArray)
         
         //take the array and rebalance it using the buildTree function
         this.root = this.buildTree(treeArray)
@@ -311,8 +309,21 @@ function driverScript() {
     console.log(driverTree.inorderRecur(driverTree.root))
 
     // Unbalance the tree by adding several numbers > 100
+    
+    driverTree.root = driverTree.buildUnbalancedTree(randomNoArr);
+    prettyPrint(driverTree.root);
+
     // Confirm that the tree is unbalanced by calling isBalanced
+    console.log(driverTree.checkBalance())
     // Balance the tree by calling rebalance
+    driverTree.rebalance()
+    prettyPrint(driverTree.root)
+    console.log(driverTree.checkBalance())
+    console.log(driverTree.levelOrder())
+    console.log(driverTree.preorderRecur(driverTree.root))
+    console.log(driverTree.postorderRecur(driverTree.root))
+    console.log(driverTree.inorderRecur(driverTree.root))
+
     // Confirm that the tree is balanced by calling isBalanced
     // Print out all elements in level, pre, post, and in order
 } 
